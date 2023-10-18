@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Démo Ajax{% endblock %}
+
+{% block body %}
+    <select>
+        <option>---- choisir -----</option>
+        {% for article in articles %}
+            <option value="{{ article.id }}" > {{ article.titre }} </option>
+        {% endfor %}
+    </select>
+    <div class="display">
+        <p>Titre <span id="titre"></span></p>               
+        <p>Description <span id="description"></span></p>               
+        <p>Prix <span id="prix"></span></p>               
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        jQuery(document).ready(function($){
+            $("select").change(function(){
+                // fetch
+                let ENDPOINT = "http://127.0.0.1:8000/ajax/"+this.value
+                // Ajax
+                fetch(ENDPOINT)
+                    .then(reponse=>reponse.json())
+                    .then(article=>{
+                        $("#titre").html(article.titre)
+                        $("#description").html(article.description)
+                        $("#prix").html(article.prix)
+                    })
+            })
+        })
+    </script>
+{% endblock %}
